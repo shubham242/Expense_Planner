@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './transaction.dart';
+import './widgets/user_transactions.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,20 +15,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  final List<Transaction> transactions = [
-    Transaction(
-      id: 't1',
-      title: 'New Shoes',
-      amount: 70,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Groceries',
-      amount: 100,
-      date: DateTime.now(),
-    ),
-  ];
+  final titleInput = TextEditingController();
+  final amountInput = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,21 +24,19 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Flutter App'),
       ),
-      body: Column(
-        children: <Widget>[
-          Card(
-            child: Container(
-              color: Colors.blue,
-              width: double.infinity,
-              child: Text('CHART!'),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Card(
+              child: Container(
+                color: Colors.blue,
+                width: double.infinity,
+                child: Text('CHART!'),
+              ),
             ),
-          ),
-          Card(
-            child: Container(
-              child: Text('List of tx'),
-            ),
-          ),
-        ],
+            UserTransactions(),
+          ],
+        ),
       ),
     );
   }
