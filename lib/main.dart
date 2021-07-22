@@ -90,6 +90,52 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  List<Widget> _buildLandscape(
+    AppBar appBar,
+    Widget txList,
+  ) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Show Chart'),
+          Switch.adaptive(
+              activeColor: Theme.of(context).accentColor,
+              value: _show,
+              onChanged: (val) {
+                setState(() {
+                  _show = val;
+                });
+              }),
+        ],
+      ),
+      _show
+          ? Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.7,
+              child: Chart(_recentTx))
+          : txList
+    ];
+  }
+
+  List<Widget> _buildPortrait(
+    AppBar appBar,
+    Widget txList,
+  ) {
+    return [
+      Container(
+        height: (MediaQuery.of(context).size.height -
+                appBar.preferredSize.height -
+                MediaQuery.of(context).padding.top) *
+            0.3,
+        child: Chart(_recentTx),
+      ),
+      txList
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLand = MediaQuery.of(context).orientation == Orientation.landscape;
@@ -116,37 +162,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            if (isLand)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Show Chart'),
-                  Switch(
-                      value: _show,
-                      onChanged: (val) {
-                        setState(() {
-                          _show = val;
-                        });
-                      }),
-                ],
-              ),
-            if (!isLand)
-              Container(
-                  height: (MediaQuery.of(context).size.height -
-                          appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
-                      0.3,
-                  child: Chart(_recentTx)),
-            if (!isLand) txList,
-            if (isLand)
-              _show
-                  ? Container(
-                      height: (MediaQuery.of(context).size.height -
-                              appBar.preferredSize.height -
-                              MediaQuery.of(context).padding.top) *
-                          0.7,
-                      child: Chart(_recentTx))
-                  : txList
+            if (isLand) ..._buildLandscape(appBar, txList),
+            if (!isLand) ..._buildPortrait(appBar, txList),
           ],
         ),
       ),
